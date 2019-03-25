@@ -1,7 +1,7 @@
 #define HASH_SIZE 11
 
 // ----------------------------------------------------------------------------------
-typedef enum { ATRIBUICAO, SUM, SUB, MULT, IF_I, PRINT, LER, GOTO_I, LABEL } OpKind;
+typedef enum { ATRIBUICAO, SUM, SUB, MULT, IF, PRINT, LER, GOTO, LABEL } OpKind;
 
 typedef enum { EMPTY, INT_CONST, STRING } ElemKind;
 
@@ -40,6 +40,8 @@ RECORD table[HASH_SIZE]; // HAST TABLE DEFINIDA COMO VARIAVEL GLOBAL
 //----------------------------------------------------------------------------------------
 
 void run(INSTR x);
+void executaLista(PROG_LIST x);
+void addProgLast(INSTR s, PROG_LIST l);
 ELEM newVar(char *s);
 ELEM newInt(int n);
 INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z);

@@ -47,6 +47,14 @@ PROG_LIST newList(INSTR head, PROG_LIST tail) {
 	return new;
 }
 
+void addProgLast(INSTR s, PROG_LIST l) {
+    if(l == NULL) return;
+    while((l->next) != NULL) {
+    	l = l->next;
+    }
+    l->next = newList(s, NULL);
+}
+
 // exemplo
 // x=2
 // y=x+4
@@ -105,9 +113,22 @@ int getValue(ELEM x) {
 	else return -1;
 }
 
+void executaLista(PROG_LIST x) {
+	if(x==NULL) {
+		printf("Nenhuma instrução a apresentar.");
+		return;
+	}
+	else {
+		while(x->next != NULL) {
+			run(x->elem);
+			x = x->next;
+		}
+	}
+}
+
 void run(INSTR x) {
 	switch(x.op) {
-		case ATRIBUICAO:
+		case ATRIBUICAO:		
 			insert(x.first.content.name, getValue(x.second));
 		break;
 
@@ -123,8 +144,10 @@ void run(INSTR x) {
 			insert(x.first.content.name, getValue(x.second)*getValue(x.third));
 		break;
 
-		case IF_I:
+		case IF:
+			if(getValue(x.first)!=NULL) { // se a varaivel ja tem valor siga para o goto
 
+			}
 		break;
 
 		case PRINT:
@@ -135,7 +158,7 @@ void run(INSTR x) {
 			//insert(x.first.content.name, getValue(x.second));
 		break;
 
-		case GOTO_I:
+		case GOTO:
 
 		break;
 

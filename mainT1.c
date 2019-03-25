@@ -5,6 +5,7 @@
 #define maxSize 20
 
 int main() {
+	/*
 	printf("Início: \n");
 	//printf("Escreva 'quit' para sair ou uma ação: ");
 	char *auxiliar = malloc(maxSize*sizeof(char));
@@ -30,6 +31,6 @@ int main() {
 	}
 
 	printf("Obrigado, encerrado.\n");
-
+	*/
 	return 0;
 }
