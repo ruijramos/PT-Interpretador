@@ -9,23 +9,20 @@ INSTR avaliarInstrucao(char *s) {
 	INSTR x;
 
 	// reservas de espaço
-	char *op = malloc(maxSize*sizeof(char));
+	OpKind op;
 	char *first = malloc(maxSize*sizeof(char));
 	char *second = malloc(maxSize*sizeof(char));
 	char *third = malloc(maxSize*sizeof(char));
 	char *token = malloc(maxSize*sizeof(char));
 
 	token = strtok(s, " "); // primeira palavra da string da instrução
-	puts(token);
 	
 	// SAO STRING NAO SE USA SWITCH
 	if(strcmp(token, "PRINT")==0) {
-		op = token;
-		puts(op);
+		op = PRINT;
 		while(token != NULL) {
 			token = strtok(NULL, " ");
 			first = token;
-			puts(first);
 		}
 		ELEM first1 = newVar(first);
 		ELEM y = empty();
@@ -33,27 +30,36 @@ INSTR avaliarInstrucao(char *s) {
 		return x;
 	}
 
+	if(strcmp(token, "LER")==0) { // LER x 4 ... x = 4
+		op = LER;
+		int i=1;
+		while(token != NULL) {
+			token = strtok(NULL, " ");
+			if(i==1) first = token;
+			if(i==2) second = token;
+			i++;
+		}
+		ELEM first1 = newVar(first);
+		int secondtoInt = atoi(second);
+		ELEM second1 = newInt(secondtoInt);
+		ELEM y = empty();	
+		x = newInstr(op, first1, second1, y);
+		return x;
+	}
+
 	return x;
 }
-
-/*
-token = strtok(s, " "); // primeira palavra da string da instrução
-while(token != NULL) {
-	token = strtok(NULL, " ");
-}
-*/
 
 int main() {
 	PROG_LIST lista = malloc(sizeof(struct prog_list));
 	
 	char *auxiliar = malloc(maxSize*sizeof(char));
-	gets(auxiliar);
+	scanf("%[^\n]",auxiliar);getchar();
 
 	while(strcmp(auxiliar, "QUIT")!=0) {
 		INSTR x = avaliarInstrucao(auxiliar);
 		addProgLast(x, lista);
-		strcpy(auxiliar, "");
-		gets(auxiliar);
+		scanf("%[^\n]",auxiliar);getchar();
 	}
 
 	executaLista(lista);

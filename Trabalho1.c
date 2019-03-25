@@ -8,7 +8,7 @@
 ELEM newVar(char *s) {
 	ELEM y;
 	y.kind = STRING;
-	y.content.name = strdup(s);
+	y.content.name = s;
 	return y;
 }
 
@@ -128,7 +128,8 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 		return;
 	}
 	else {
-		while(x->next != NULL) { // enquanto houver instruções para ler 
+		while(x != NULL) { // enquanto houver instruções para ler 
+			printf("%s\n", x->elem.op);
 			switch(x->elem.op) {
 				case ATRIBUICAO:		
 					insert(x->elem.first.content.name, getValue(x->elem.second)); // first = second
