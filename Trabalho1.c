@@ -4,6 +4,7 @@
 #include "Trabalho1.h"
 #define MULTIPLIER 31
 
+// vão ser usadas no parce -----------------------------------
 ELEM newVar(char *s) {
 	ELEM y;
 	y.kind = STRING;
@@ -18,16 +19,15 @@ ELEM newInt(int n) {
 	return y;
 }
 
-// ir buscar valor de um ELEM x
-// int y = x.content.val;
-
 ELEM empty() {
 	ELEM y;
 	y.kind = EMPTY;
 	return y;
 }
 
-INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z) {
+// -----------------------------------------------------------
+
+INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z) { // nova instrução
 	INSTR aux;
 	aux.op = oper;
 	aux.first = x;
@@ -40,6 +40,7 @@ INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z) {
 	// k é a representação em memória da instrução
 }
 
+// meter uma instrução na lista -------------------------------
 PROG_LIST newList(INSTR head, PROG_LIST tail) {
 	PROG_LIST new = malloc(sizeof(struct prog_list));
 	new -> elem = head;
@@ -54,6 +55,7 @@ void addProgLast(INSTR s, PROG_LIST l) {
     }
     l->next = newList(s, NULL);
 }
+// -------------------------------------------------------------
 
 // exemplo
 // x=2
@@ -85,7 +87,7 @@ RECORD lookup(char *variavel) { // procura e retorna a posiçao na lista onde se
 	return NULL;
 }
 
-void insert(char *variavel, int value) {
+void insert(char *variavel, int value) { // insere variavel/valor na table
 	int index;
 	RECORD p;
 	p = (RECORD)malloc(sizeof(struct record));
@@ -97,13 +99,13 @@ void insert(char *variavel, int value) {
 	table[index] = p;	
 }
 
-void init_table() {
+void init_table() { // limpa a tabela
 	for(int i=0; i<HASH_SIZE; i++) {
 		table[i] = NULL;
 	}
 }
 
-int getValue(ELEM x) {
+int getValue(ELEM x) { // retorna o valor de um elemento
 	if(x.kind==STRING) {
 		return lookup(x.content.name)->valor;
 	}
@@ -113,61 +115,64 @@ int getValue(ELEM x) {
 	else return -1;
 }
 
-void executaLista(PROG_LIST x) {
-	if(x==NULL) {
+
+
+void executaLista(PROG_LIST x) { // executa a lista de instruçoes
+	if(x==NULL) { // se é nula
 		printf("Nenhuma instrução a apresentar.");
 		return;
 	}
 	else {
-		while(x->next != NULL) {
-			run(x->elem);
-			x = x->next;
+		while(x->next != NULL) { // enquanto houver instruções para ler 
+			switch(x->elem.op) {
+				case ATRIBUICAO:		
+					insert(x->elem.first.content.name, getValue(x->elem.second)); // first = second
+				break;
+
+				case SUM:
+					insert(x->elem.first.content.name, getValue(x->elem.second)+getValue(x->elem.third)); // first = second + third
+				break;
+
+				case SUB:
+					insert(x->elem.first.content.name, getValue(x->elem.second)-getValue(x->elem.third)); // first = second - third
+				break;
+
+				case MULT:
+					insert(x->elem.first.content.name, getValue(x->elem.second)*getValue(x->elem.third));// first = second * third
+				break;
+
+				case IF:
+					if(getValue(x->elem.first)!=-1) { // se a varaivel ja tem valor siga para o goto
+						// ir para o goto
+					}
+				break;
+
+				case PRINT:
+					printf("%d\n", getValue(x->elem.first));
+				break;
+
+				case LER:
+					insert(x->elem.first.content.name, getValue(x->elem.second)); // LER X 4 --> x=4
+				break;
+
+				case GOTO:
+
+				break;
+
+				case LABEL:
+					continue; // chegamos ao LABEL
+				break;
+
+				case QUIT:
+					return; // saímos do programa
+				break;
+
+				default:
+					return;
+			}
+			x = x->next; // segue para a proxima instrução
 		}
 	}
 }
 
-void run(INSTR x) {
-	switch(x.op) {
-		case ATRIBUICAO:		
-			insert(x.first.content.name, getValue(x.second));
-		break;
 
-		case SUM:
-			insert(x.first.content.name, getValue(x.second)+getValue(x.third));
-		break;
-
-		case SUB:
-			insert(x.first.content.name, getValue(x.second)-getValue(x.third));
-		break;
-
-		case MULT:
-			insert(x.first.content.name, getValue(x.second)*getValue(x.third));
-		break;
-
-		case IF:
-			if(getValue(x.first)!=NULL) { // se a varaivel ja tem valor siga para o goto
-
-			}
-		break;
-
-		case PRINT:
-			printf("%d\n", getValue(x.first));
-		break;
-
-		case LER:
-			//insert(x.first.content.name, getValue(x.second));
-		break;
-
-		case GOTO:
-
-		break;
-
-		case LABEL:
-
-		break;
-
-		default:
-			return;
-	}
-
-}

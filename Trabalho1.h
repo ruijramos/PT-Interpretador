@@ -1,7 +1,7 @@
 #define HASH_SIZE 11
 
 // ----------------------------------------------------------------------------------
-typedef enum { ATRIBUICAO, SUM, SUB, MULT, IF, PRINT, LER, GOTO, LABEL } OpKind;
+typedef enum { ATRIBUICAO, SUM, SUB, MULT, IF, PRINT, LER, GOTO, LABEL, QUIT } OpKind;
 
 typedef enum { EMPTY, INT_CONST, STRING } ElemKind;
 
@@ -25,12 +25,12 @@ typedef struct {
 // ------------------------------------------------------------------------------------
 
 // ----------- listas e tables ----------------------------------------------------------
-typedef struct prog_list {
+typedef struct prog_list { // lsita de instruçoes
 	INSTR elem;
 	struct prog_list *next;
 } *PROG_LIST;
 
-typedef struct record {
+typedef struct record { // hashtable com o valor das variaveis
 	char *variavel; 
 	int valor;
 	struct record *next;
@@ -39,7 +39,6 @@ typedef struct record {
 RECORD table[HASH_SIZE]; // HAST TABLE DEFINIDA COMO VARIAVEL GLOBAL
 //----------------------------------------------------------------------------------------
 
-void run(INSTR x);
 void executaLista(PROG_LIST x);
 void addProgLast(INSTR s, PROG_LIST l);
 ELEM newVar(char *s);
@@ -50,6 +49,5 @@ unsigned int hash(char *variavel); // ir ver onde ta a variavel
 RECORD lookup(char *variavel); // procura e retorna a posiçao na lista onde se encontra a string
 void insert(char *variavel, int value); // insere variavel/valor na hastable
 void init_table(); // limpa table
-int getValue(ELEM x);
-void AddInstrOnList(INSTR a, PROG_LIST b);
+int getValue(ELEM x); // valor deu um elemento
 
