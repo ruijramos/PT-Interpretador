@@ -49,7 +49,12 @@ PROG_LIST newList(INSTR head, PROG_LIST tail) {
 }
 
 void addProgLast(INSTR s, PROG_LIST l) {
-    if(l == NULL) return;
+    if(l == NULL) {
+    	l->elem = s;
+    	l->next = NULL;
+    	return;
+    }
+
     while((l->next) != NULL) {
     	l = l->next;
     }
@@ -119,7 +124,7 @@ int getValue(ELEM x) { // retorna o valor de um elemento
 
 void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 	if(x==NULL) { // se é nula
-		printf("Nenhuma instrução a apresentar.");
+		printf("Nenhuma instrução a apresentar.\n");
 		return;
 	}
 	else {
@@ -141,30 +146,31 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 					insert(x->elem.first.content.name, getValue(x->elem.second)*getValue(x->elem.third));// first = second * third
 				break;
 
-				case IF:
+				// -- em falta ------------------------------------------------------------------------------------------------------
+				case IF: 
 					if(getValue(x->elem.first)!=-1) { // se a varaivel ja tem valor siga para o goto
 						// ir para o goto
 					}
 				break;
+				// ------------------------------------------------------------------------------------------------------------------
 
 				case PRINT:
-					printf("%d\n", getValue(x->elem.first));
+					if(getValue(x->elem.first)!=-1)	printf("%d\n", getValue(x->elem.first));
+					else printf("Variável sem valor inserido. \n");
 				break;
 
 				case LER:
 					insert(x->elem.first.content.name, getValue(x->elem.second)); // LER X 4 --> x=4
 				break;
 
+				// -- em falta -------------------------------------------------------------------------------------------------------
 				case GOTO:
 
 				break;
+				// -------------------------------------------------------------------------------------------------------------------
 
 				case LABEL:
 					continue; // chegamos ao LABEL
-				break;
-
-				case QUIT:
-					return; // saímos do programa
 				break;
 
 				default:

@@ -1,0 +1,3 @@
+dúvidas :
+- Como transformar uma string num opkind
+- Como passar para uma label

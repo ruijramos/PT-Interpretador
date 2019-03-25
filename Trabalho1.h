@@ -24,6 +24,8 @@ typedef struct {
 } INSTR;
 // ------------------------------------------------------------------------------------
 
+
+
 // ----------- listas e tables ----------------------------------------------------------
 typedef struct prog_list { // lsita de instruçoes
 	INSTR elem;
@@ -39,10 +41,14 @@ typedef struct record { // hashtable com o valor das variaveis
 RECORD table[HASH_SIZE]; // HAST TABLE DEFINIDA COMO VARIAVEL GLOBAL
 //----------------------------------------------------------------------------------------
 
+
+
+
 void executaLista(PROG_LIST x);
 void addProgLast(INSTR s, PROG_LIST l);
 ELEM newVar(char *s);
 ELEM newInt(int n);
+ELEM empty();
 INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z);
 PROG_LIST newList(INSTR head, PROG_LIST tail); // criar lista
 unsigned int hash(char *variavel); // ir ver onde ta a variavel
