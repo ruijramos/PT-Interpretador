@@ -24,6 +24,11 @@ typedef struct {
 } INSTR;
 // ------------------------------------------------------------------------------------
 
+ELEM newVar(char *s);
+ELEM newInt(int n);
+ELEM empty();
+INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z);
+int getValue(ELEM x); // valor deu um elemento
 
 
 // ----------- listas e tables ----------------------------------------------------------
@@ -43,17 +48,13 @@ RECORD table[HASH_SIZE]; // HAST TABLE DEFINIDA COMO VARIAVEL GLOBAL
 
 
 
-
+int listSize(PROG_LIST x);
 void executaLista(PROG_LIST x);
-void addProgLast(INSTR s, PROG_LIST l);
-ELEM newVar(char *s);
-ELEM newInt(int n);
-ELEM empty();
-INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z);
+PROG_LIST addProgLast(INSTR s, PROG_LIST l);
 PROG_LIST newList(INSTR head, PROG_LIST tail); // criar lista
 unsigned int hash(char *variavel); // ir ver onde ta a variavel
 RECORD lookup(char *variavel); // procura e retorna a posiçao na lista onde se encontra a string
 void insert(char *variavel, int value); // insere variavel/valor na hastable
 void init_table(); // limpa table
-int getValue(ELEM x); // valor deu um elemento
+
 

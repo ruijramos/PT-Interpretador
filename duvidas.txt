@@ -1,3 +1,3 @@
 dúvidas :
-- Como transformar uma string num opkind
 - Como passar para uma label
+- qd vai por um valor na hash table, chama o lookup q chama o hash e faz tudo bem (aparentemente)... quando vai buscar o valor para printar, faz o get value q o manda para o lookup q o manda para o hash, mas no hash entra no for e morre

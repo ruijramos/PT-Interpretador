@@ -17,7 +17,7 @@ INSTR avaliarInstrucao(char *s) {
 
 	token = strtok(s, " "); // primeira palavra da string da instrução
 	
-	// SAO STRING NAO SE USA SWITCH
+	// SAO STRING NAO SE USA SWITCH ---------------------------------------------------------------------
 	if(strcmp(token, "PRINT")==0) {
 		op = PRINT;
 		while(token != NULL) {
@@ -46,22 +46,27 @@ INSTR avaliarInstrucao(char *s) {
 		x = newInstr(op, first1, second1, y);
 		return x;
 	}
+	// -------------------------------------------------------------------------------------------------
 
 	return x;
 }
 
 int main() {
-	PROG_LIST lista = malloc(sizeof(struct prog_list));
 	
 	char *auxiliar = malloc(maxSize*sizeof(char));
+	scanf("%[^\n]",auxiliar);getchar();
+	INSTR x = avaliarInstrucao(auxiliar);
+	PROG_LIST lista = newList(x, NULL);
+
 	scanf("%[^\n]",auxiliar);getchar();
 
 	while(strcmp(auxiliar, "QUIT")!=0) {
 		INSTR x = avaliarInstrucao(auxiliar);
-		addProgLast(x, lista);
+		lista = addProgLast(x, lista);
 		scanf("%[^\n]",auxiliar);getchar();
 	}
 
+	printf("Vamos iniciar a execução - Número de instruções: %d\n", listSize(lista));
 	executaLista(lista);
 	
 	return 0;

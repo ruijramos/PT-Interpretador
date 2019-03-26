@@ -48,17 +48,29 @@ PROG_LIST newList(INSTR head, PROG_LIST tail) {
 	return new;
 }
 
-void addProgLast(INSTR s, PROG_LIST l) {
+PROG_LIST addProgLast(INSTR s, PROG_LIST l) {
+    PROG_LIST aux = l;
     if(l == NULL) {
-    	l->elem = s;
-    	l->next = NULL;
-    	return;
+    	return newList(s, NULL);
     }
-
     while((l->next) != NULL) {
     	l = l->next;
     }
     l->next = newList(s, NULL);
+    return aux;
+}
+
+int listSize(PROG_LIST x) {
+	if(x==NULL) return 0;
+	else {
+		int size=0;
+		while(x != NULL) {
+			size++;
+			x = x->next;
+		}
+		return size;
+	}
+	return -1;
 }
 // -------------------------------------------------------------
 
@@ -73,6 +85,7 @@ unsigned int hash(char *variavel) { // retorna o indice de onde está a string
 	unsigned char *p;
 	h=0;
 
+	// qd vem por o valor n ha problema, mas qd vem buscar o valor para printar chega a este for e morre
 	for(p=(unsigned char *)variavel; *p != '\0'; p++) {
 		h = MULTIPLIER*h + *p;
 	}
@@ -112,6 +125,7 @@ void init_table() { // limpa a tabela
 
 int getValue(ELEM x) { // retorna o valor de um elemento
 	if(x.kind==STRING) {
+		// chega aqui, mas n faz o return SF
 		return lookup(x.content.name)->valor;
 	}
 	if(x.kind==INT_CONST) {
@@ -120,8 +134,6 @@ int getValue(ELEM x) { // retorna o valor de um elemento
 	else return -1;
 }
 
-
-
 void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 	if(x==NULL) { // se é nula
 		printf("Nenhuma instrução a apresentar.\n");
@@ -129,7 +141,7 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 	}
 	else {
 		while(x != NULL) { // enquanto houver instruções para ler 
-			printf("%s\n", x->elem.op);
+			// entra aqui e percorre bem a cena
 			switch(x->elem.op) {
 				case ATRIBUICAO:		
 					insert(x->elem.first.content.name, getValue(x->elem.second)); // first = second
@@ -156,11 +168,16 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 				// ------------------------------------------------------------------------------------------------------------------
 
 				case PRINT:
-					if(getValue(x->elem.first)!=-1)	printf("%d\n", getValue(x->elem.first));
+					// entra aqui
+					if(getValue(x->elem.first)!=-1)	{
+						// nao chega aqui
+						printf("%d\n", getValue(x->elem.first));
+					}
 					else printf("Variável sem valor inserido. \n");
 				break;
 
 				case LER:
+					// entra aqui
 					insert(x->elem.first.content.name, getValue(x->elem.second)); // LER X 4 --> x=4
 				break;
 
