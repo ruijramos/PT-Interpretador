@@ -32,8 +32,7 @@ INSTR avaliarInstrucao(char *s) {
 		x = newInstr(op, first1, y, y);
 		return x;
 	}
-
-	if(strcmp(token, "LER")==0) { // LER x 4 ... x = 4
+	else if(strcmp(token, "LER")==0) { // LER x 4 ... x = 4
 		op = LER;
 		int i=1;
 		while(token != NULL) {
@@ -49,11 +48,10 @@ INSTR avaliarInstrucao(char *s) {
 		ELEM second1 = newInt(secondtoInt);
 		ELEM y = empty();	
 		x = newInstr(op, first1, second1, y);
-		// printa certo - printf("foi guardada na x: %s\n", first1.content.name);
+		printf("variavel guardada: %s\n", x.first.content.name);
 		return x;
 	}
-
-	if(strcmp(token, "LABEL")==0) {
+	else if(strcmp(token, "LABEL")==0) {
 		op = LABEL;
 		int i=1;
 		while(token!=NULL) {
