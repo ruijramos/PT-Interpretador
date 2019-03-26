@@ -1,4 +1,4 @@
-#define HASH_SIZE 11
+#define HASH_SIZE 7
 
 // ----------------------------------------------------------------------------------
 typedef enum { ATRIBUICAO, SUM, SUB, MULT, DIV, IF, PRINT, LER, GOTO, LABEL, QUIT } OpKind;
@@ -11,7 +11,7 @@ typedef struct {
 		int val; 
 		char *name;
 	} content;
-} ELEM; // dá-nos o tipo dos elementos
+} ELEM; 
 
 typedef struct {
 	OpKind op;
@@ -33,7 +33,7 @@ int getValue(ELEM x); // valor deu um elemento
 
 // ----------- listas e tables ----------------------------------------------------------
 typedef struct prog_list { // lsita de instruçoes
-	INSTR elem;
+	INSTR instrucao;
 	struct prog_list *next;
 } *PROG_LIST;
 
@@ -52,9 +52,9 @@ int listSize(PROG_LIST x);
 void executaLista(PROG_LIST x);
 PROG_LIST addProgLast(INSTR s, PROG_LIST l);
 PROG_LIST newList(INSTR head, PROG_LIST tail); // criar lista
-unsigned int hash(char *variavel); // ir ver onde ta a variavel
-RECORD lookup(char *variavel); // procura e retorna a posiçao na lista onde se encontra a string
-void insert(char *variavel, int value); // insere variavel/valor na hastable
+unsigned int hash(char *s); // ir ver onde ta a variavel
+RECORD lookup(char *s); // procura e retorna a posiçao na lista onde se encontra a string
+void insert(char *s, int value); // insere variavel/valor na hastable
 void init_table(); // limpa table
 
 

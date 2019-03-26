@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Trabalho1.h"
-#define MULTIPLIER 31
+#define MULTIPLIER 32
 
 // vão ser usadas no parce -----------------------------------
 ELEM newVar(char *s) {
 	ELEM y;
 	y.kind = STRING;
-	y.content.name = s;
+	y.content.name = s;	
 	return y;
 }
 
@@ -43,7 +43,7 @@ INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z) { // nova instrução
 // meter uma instrução na lista -------------------------------
 PROG_LIST newList(INSTR head, PROG_LIST tail) {
 	PROG_LIST new = malloc(sizeof(struct prog_list));
-	new -> elem = head;
+	new -> instrucao = head;
 	new -> next = tail;
 	return new;
 }
@@ -80,41 +80,40 @@ int listSize(PROG_LIST x) {
 // PROG_LIST p = newList(newInstr(ATRIBUICAO, newVar("x"), newInt(2), empty()))
 // newList(newInstr(ADD, newVar("y"), newVar("x"), newInt(4), NULL))
 
-unsigned int hash(char *variavel) { // retorna o indice de onde está a string 
+unsigned int hash(char *s) { // retorna o indice de onde está a string 
 	unsigned int h;
 	unsigned char *p;
 	h=0;
 
-	for(p=(unsigned char *)variavel; *p != '\0'; p++) {
+	for(p=(unsigned char *)s; *p != '\0'; p++) {
 		h = MULTIPLIER*h + *p;
 	}
 
 	return h%HASH_SIZE;
 }
 
-RECORD lookup(char *variavel) { // procura e retorna a posiçao na lista onde se encontra a string
+RECORD lookup(char *s) { // procura e retorna a posiçao na lista onde se encontra a string
 	int index;
 	RECORD p;
-	index = hash(variavel);
+	index = hash(s);
 
-	// falha neste for
 	for( p=table[index]; p!=NULL; p=p->next) {
-		if(strcmp(variavel, p->variavel)==0) return p;
+		if(strcmp(s, p->variavel)==0) return p;
 	}
 
 	return NULL;
 }
 
-void insert(char *variavel, int value) { // insere variavel/valor na table
+void insert(char *s, int value) { // insere variavel/valor na table
 	int index;
 	RECORD p;
 	p = (RECORD)malloc(sizeof(struct record));
-	index = hash(variavel);
+	index = hash(s);
 
-	p->variavel = variavel; 
+	p->variavel = s; 
 	p->valor = value;
-	(p->next) = table[index];
-	table[index] = p;	
+	p->next = table[index];
+	table[index] = p;
 }
 
 void init_table() { // limpa a tabela
@@ -142,30 +141,30 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 	else {
 		while(x != NULL) { // enquanto houver instruções para ler 
 			// entra aqui e percorre bem a cena
-			switch(x->elem.op) {
+			switch(x->instrucao.op) {
 				case ATRIBUICAO:		
-					insert(x->elem.first.content.name, getValue(x->elem.second)); // first = second
+					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)); // first = second
 				break;
 
 				case SUM:
-					insert(x->elem.first.content.name, getValue(x->elem.second)+getValue(x->elem.third)); // first = second + third
+					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)+getValue(x->instrucao.third)); // first = second + third
 				break;
 
 				case SUB:
-					insert(x->elem.first.content.name, getValue(x->elem.second)-getValue(x->elem.third)); // first = second - third
+					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)-getValue(x->instrucao.third)); // first = second - third
 				break;
 
 				case MULT:
-					insert(x->elem.first.content.name, getValue(x->elem.second)*getValue(x->elem.third));// first = second * third
+					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)*getValue(x->instrucao.third));// first = second * third
 				break;
 
 				case DIV: 
-					insert(x->elem.first.content.name, getValue(x->elem.second)/getValue(x->elem.third));
+					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)/getValue(x->instrucao.third));
 				break;
 
 				// -- em falta ------------------------------------------------------------------------------------------------------
 				case IF: 
-					if(getValue(x->elem.first)!=-1) { // se a varaivel ja tem valor siga para o goto
+					if(getValue(x->instrucao.first)!=-1) { // se a varaivel ja tem valor siga para o goto
 						// ir para o goto
 					}
 				break;
@@ -173,16 +172,19 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 
 				case PRINT:
 					// entra aqui
-					if(getValue(x->elem.first)!=-1)	{
+					if(getValue(x->instrucao.first)!=-1)	{
 						// nao chega aqui
-						printf("%d\n", getValue(x->elem.first));
+						printf("%d\n", getValue(x->instrucao.first));
 					}
 					else printf("Variável sem valor inserido. \n");
 				break;
 
 				case LER:
 					// entra aqui
-					insert(x->elem.first.content.name, getValue(x->elem.second)); // LER X 4 --> x=4
+					// certo - printf("VALOR LIDO: %d\n", getValue(x->instrucao.second));
+					// problema está aqui: a string vem vazia
+					printf("variavel lida: %s\n", x->instrucao.first.content.name);
+					insert(x->instrucao.first.content.name, getValue(x->instrucao.second));
 				break;
 
 				// -- em falta -------------------------------------------------------------------------------------------------------
@@ -192,6 +194,7 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 				// -------------------------------------------------------------------------------------------------------------------
 
 				case LABEL:
+					x = x->next; 
 					continue; // chegamos ao LABEL
 				break;
 

@@ -1,3 +1,7 @@
 dúvidas :
 - Como passar para uma label
-- qd vai por um valor na hash table, chama o lookup q chama o hash e faz tudo bem (aparentemente)... quando vai buscar o valor para printar, faz o get value q o manda para o lookup q o manda para o hash, mas no hash entra no for e morre
+- os valores do OP e ELEMS sao bem guardados na instrução q é acrescentada na lista.. mas depois quando vou por exemplo:
+LER x 2
+no switch quando entra no case LER
+prrinta bem o valor do second (2)
+mas printa vazio o valor da var first que deveria ser x

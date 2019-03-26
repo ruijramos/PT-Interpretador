@@ -18,7 +18,7 @@ INSTR avaliarInstrucao(char *s) {
 	token = strtok(s, " "); // primeira palavra da string da instrução
 	
 	// SAO STRING NAO SE USA SWITCH ---------------------------------------------------------------------
-	if(strcmp(token, "PRINT")==0) {
+	if(strcmp(token, "PRINT")==0) { // PRINT x ... valor de x
 		op = PRINT;
 		int i=1;
 		while(token != NULL) {
@@ -26,7 +26,7 @@ INSTR avaliarInstrucao(char *s) {
 			if(i==1) first = token;
 			i++;
 		}
-		printf("first: %s\n" , first);
+		printf("first (a variavel que se vai printar): %s\n" , first);
 		ELEM first1 = newVar(first);
 		ELEM y = empty();
 		x = newInstr(op, first1, y, y);
@@ -42,13 +42,28 @@ INSTR avaliarInstrucao(char *s) {
 			if(i==2) second = token;
 			i++;
 		}
-		printf("first: %s\n", first);
-		printf("second: %s\n", second);
+		printf("first (onde se guarda): %s\n", first);
+		printf("second (o valor a guardar): %s\n", second);
 		ELEM first1 = newVar(first);
 		int secondtoInt = atoi(second);
 		ELEM second1 = newInt(secondtoInt);
 		ELEM y = empty();	
 		x = newInstr(op, first1, second1, y);
+		// printa certo - printf("foi guardada na x: %s\n", first1.content.name);
+		return x;
+	}
+
+	if(strcmp(token, "LABEL")==0) {
+		op = LABEL;
+		int i=1;
+		while(token!=NULL) {
+			token = strtok(NULL, " ");
+			if(i==1) first = token;
+			i++;
+		}
+		printf("first (nome do label): %s\n", first);
+		ELEM y = empty();
+		x = newInstr(op, y, y, y);
 		return x;
 	}
 	// -------------------------------------------------------------------------------------------------
