@@ -85,7 +85,6 @@ unsigned int hash(char *variavel) { // retorna o indice de onde está a string
 	unsigned char *p;
 	h=0;
 
-	// qd vem por o valor n ha problema, mas qd vem buscar o valor para printar chega a este for e morre
 	for(p=(unsigned char *)variavel; *p != '\0'; p++) {
 		h = MULTIPLIER*h + *p;
 	}
@@ -98,6 +97,7 @@ RECORD lookup(char *variavel) { // procura e retorna a posiçao na lista onde se
 	RECORD p;
 	index = hash(variavel);
 
+	// falha neste for
 	for( p=table[index]; p!=NULL; p=p->next) {
 		if(strcmp(variavel, p->variavel)==0) return p;
 	}
@@ -157,6 +157,10 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 
 				case MULT:
 					insert(x->elem.first.content.name, getValue(x->elem.second)*getValue(x->elem.third));// first = second * third
+				break;
+
+				case DIV: 
+					insert(x->elem.first.content.name, getValue(x->elem.second)/getValue(x->elem.third));
 				break;
 
 				// -- em falta ------------------------------------------------------------------------------------------------------

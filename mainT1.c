@@ -20,10 +20,13 @@ INSTR avaliarInstrucao(char *s) {
 	// SAO STRING NAO SE USA SWITCH ---------------------------------------------------------------------
 	if(strcmp(token, "PRINT")==0) {
 		op = PRINT;
+		int i=1;
 		while(token != NULL) {
 			token = strtok(NULL, " ");
-			first = token;
+			if(i==1) first = token;
+			i++;
 		}
+		printf("first: %s\n" , first);
 		ELEM first1 = newVar(first);
 		ELEM y = empty();
 		x = newInstr(op, first1, y, y);
@@ -39,6 +42,8 @@ INSTR avaliarInstrucao(char *s) {
 			if(i==2) second = token;
 			i++;
 		}
+		printf("first: %s\n", first);
+		printf("second: %s\n", second);
 		ELEM first1 = newVar(first);
 		int secondtoInt = atoi(second);
 		ELEM second1 = newInt(secondtoInt);

@@ -1,7 +1,7 @@
 #define HASH_SIZE 11
 
 // ----------------------------------------------------------------------------------
-typedef enum { ATRIBUICAO, SUM, SUB, MULT, IF, PRINT, LER, GOTO, LABEL, QUIT } OpKind;
+typedef enum { ATRIBUICAO, SUM, SUB, MULT, DIV, IF, PRINT, LER, GOTO, LABEL, QUIT } OpKind;
 
 typedef enum { EMPTY, INT_CONST, STRING } ElemKind;
 
