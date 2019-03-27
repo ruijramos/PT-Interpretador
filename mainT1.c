@@ -6,7 +6,7 @@
 #define maxSize 20
 
 
-INSTR avaliarInstrucao(char *s) {
+INSTR avaliarInstrucao(char *s, HASHMAP hm, int posicao) {
 	INSTR x;
 
 	// reservas de espaço
@@ -28,9 +28,7 @@ INSTR avaliarInstrucao(char *s) {
 			i++;
 		}
 		//printf("first (a variavel que se vai printar): %s\n" , first);
-		ELEM first1 = newVar(first);
-		ELEM y = empty();
-		x = newInstr(op, first1, y, y);
+		x = newInstr(op, newVar(first), empty(), empty());
 		return x;
 	}
 	else if(strcmp(token, "LER")==0) { // LER x 4 ... x = 4
@@ -44,31 +42,27 @@ INSTR avaliarInstrucao(char *s) {
 		}
 		//printf("first (onde se guarda): %s\n", first);
 		//printf("second (o valor a guardar): %s\n", second);
-		ELEM first1 = newVar(first);
 		int secondtoInt = atoi(second);
-		ELEM second1 = newInt(secondtoInt);
-		ELEM y = empty();	
-		x = newInstr(op, first1, second1, y);
+		x = newInstr(op, newVar(first), newInt(secondtoInt), empty());
 		return x;
 	}
-	else if(strcmp(token, "LABEL")==0) {
+	else if(strcmp(token, "LABEL")==0) { // em falta
 		op = LABEL;
-		int i=1;
-		while(token!=NULL) {
-			token = strtok(NULL, " ");
-			if(i==1) first = token;
-			i++;
-		}
-		//printf("first (nome do label): %s\n", first);
-		ELEM y = empty();
-		x = newInstr(op, y, y, y);
+		token = strtok(NULL, " ");
+		first = token;
+		x = newInstr(op, newVar(first), newInt(posicao), empty()); // LABEL L1 ... op = label, first(nome) = L1
+		hm = addHashLast(first, posicao, hm);
 		return x;
 	}
-	else if(strcmp(token, "IF")==0) {
+	else if(strcmp(token, "IF")==0) { // em falta
 
 	}
-	else if(strcmp(token, "GOTO")==0) {
-
+	else if(strcmp(token, "GOTO")==0) { // em falta
+		op = GOTO;
+		token = strtok(NULL, " ");
+		first = token; // nome de onde é para ir
+		x = newInstr(op, newVar(first), empty(), empty());
+		return x;
 	}
 	else {
 		first = token;
@@ -101,7 +95,6 @@ INSTR avaliarInstrucao(char *s) {
 			i++;	
 		}
 
-		ELEM first1 = newVar(first);
 		ELEM second1;
 		ELEM third1;
 		
@@ -111,7 +104,7 @@ INSTR avaliarInstrucao(char *s) {
 		if(isdigit(third[0])!=0) third1 = newInt(atoi(third));
 		else third1 = newVar(third);
 
-		x = newInstr(op, first1, second1, third1);
+		x = newInstr(op, newVar(first), second1, third1);
 		return x;
 	}
 	// -------------------------------------------------------------------------------------------------
@@ -121,23 +114,31 @@ INSTR avaliarInstrucao(char *s) {
 
 int main() {
 
+	printf("Bem-vindo ao Intrepetador, por favor escreva as suas instruções e encerre com <QUIT>: \n");
+	
 	char *auxiliar = malloc(maxSize*sizeof(char));
 	scanf("%[^\n]",auxiliar);getchar();
-	INSTR x = avaliarInstrucao(auxiliar);
+
+	int posicao=1;
+	HASHMAP hm = newHash("INICIO", 0, NULL);
+	INSTR x = avaliarInstrucao(auxiliar, hm, posicao);
 	PROG_LIST lista = newList(x, NULL);
 
 	scanf("%[^\n]",auxiliar);getchar();
 
-	while(strcmp(auxiliar, "QUIT")!=0) {
-		INSTR x = avaliarInstrucao(auxiliar);
+	while(strcmp(auxiliar, "<QUIT>")!=0) {
+		posicao++;
+		INSTR x = avaliarInstrucao(auxiliar, hm, posicao);
 		lista = addProgLast(x, lista);
 		scanf("%[^\n]",auxiliar);getchar();
 	}
 
-	printf("\nNúmero de instruções: %d\n", listSize(lista));
+	printf("\nNúmero de instruções inseridas: %d\n", listSize(lista));
+	//printf("\nHash contéudo: \n");
+	//printHash(hm);
 	printf("\nExecução das instruções: \n");
 	//printList(lista);
-	executaLista(lista);
+	executaLista(lista, hm);
 	
 	return 0;
 }

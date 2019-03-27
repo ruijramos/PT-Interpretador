@@ -5,7 +5,7 @@
 #include <ctype.h>
 #define MULTIPLIER 32
 
-// vão ser usadas no parce -----------------------------------
+// vão ser usadas no parce -------------------------------------------------------------
 ELEM newVar(char *s) {
 	ELEM y;
 	y.kind = STRING;
@@ -26,7 +26,7 @@ ELEM empty() {
 	return y;
 }
 
-// -----------------------------------------------------------
+// ------------------------------------------------------------------------------------
 
 INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z) { // nova instrução
 	INSTR aux;
@@ -74,6 +74,7 @@ int listSize(PROG_LIST x) {
 	return -1;
 }
 
+/*
 void imprimeInst(INSTR x) {
 	switch(x.op) {
 				case ATRIBUICAO:		
@@ -124,7 +125,6 @@ void imprimeInst(INSTR x) {
 	}
 	return;
 }
-
 void printList(PROG_LIST x) {
 	if(x==NULL) printf("Lista vazia\n");
 	else {
@@ -137,13 +137,8 @@ void printList(PROG_LIST x) {
 		}
 	}
 }
-// -------------------------------------------------------------
-
-// exemplo
-// x=2
-// y=x+4
-// PROG_LIST p = newList(newInstr(ATRIBUICAO, newVar("x"), newInt(2), empty()))
-// newList(newInstr(ADD, newVar("y"), newVar("x"), newInt(4), NULL))
+*/
+// ----------------------------------------------------------------------------------------------------------------
 
 unsigned int hash(char *s) { // retorna o indice de onde está a string 
 	unsigned int h;
@@ -197,70 +192,113 @@ int getValue(ELEM x) { // retorna o valor de um elemento
 	else return -1;
 }
 
-void executaLista(PROG_LIST x) { // executa a lista de instruçoes
+void executaLista(PROG_LIST x, HASHMAP hm) { // executa a lista de instruçoes
+	int progresso=1; // PARA SABER EM Q INSTRUÇÃO VAMOS A LER
+	int posicaoParaIr=1; // PARA OS GOTOS
 	if(x==NULL) { // se é nula
 		printf("Nenhuma instrução a apresentar.\n");
 		return;
 	}
 	else {
 		while(x != NULL) { // enquanto houver instruções para ler 
-			// entra aqui e percorre bem a cena
-			switch(x->instrucao.op) {
-				case ATRIBUICAO:	// done	
-					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)); // first = second
-				break;
+			if(posicaoParaIr<=progresso) {
+				// entra aqui e percorre bem a cena
+				switch(x->instrucao.op) {
+					case ATRIBUICAO:	// done	
+						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)); // first = second
+					break;
 
-				case SUM:          // done
-					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)+getValue(x->instrucao.third)); // first = second + third
-				break;
+					case SUM:          // done
+						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)+getValue(x->instrucao.third)); // first = second + third
+					break;
 
-				case SUB:          // done
-					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)-getValue(x->instrucao.third)); // first = second - third
-				break;
+					case SUB:          // done
+						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)-getValue(x->instrucao.third)); // first = second - third
+					break;
 
-				case MULT:         // done
-					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)*getValue(x->instrucao.third));// first = second * third
-				break;
+					case MULT:         // done
+						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)*getValue(x->instrucao.third));// first = second * third
+					break;
 
-				case DIV:          // done
-					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)/getValue(x->instrucao.third));
-				break;
+					case DIV:          // done
+						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)/getValue(x->instrucao.third));
+					break;
 
-				// -- em falta ------------------------------------------------------------------------------------------------------
-				case IF: 
-					if(getValue(x->instrucao.first)!=-1) { // se a varaivel ja tem valor siga para o goto
-						// ir para o goto
-					}
-				break;
-				// ------------------------------------------------------------------------------------------------------------------
+					// -- em falta ------------------------------------------------------------------------------------------------------
+					case IF: 
+						if(getValue(x->instrucao.first)!=-1) { // se a varaivel ja tem valor siga para o goto
+							// ir para o goto
+						}
+					break;
+					// ------------------------------------------------------------------------------------------------------------------
 
-				case PRINT:        // done
-					if(getValue(x->instrucao.first)!=-1) {
-						printf("%s = %d\n", x->instrucao.first.content.name,getValue(x->instrucao.first));
-					}
-				break;
+					case PRINT:        // done
+						if(getValue(x->instrucao.first)!=-1) {
+							printf("%s = %d\n", x->instrucao.first.content.name,getValue(x->instrucao.first));
+						}
+					break;
 
-				case LER:          // done
-					insert(x->instrucao.first.content.name, getValue(x->instrucao.second));
-				break;
+					case LER:          // done
+						insert(x->instrucao.first.content.name, getValue(x->instrucao.second));
+					break;
 
-				// -- em falta -------------------------------------------------------------------------------------------------------
-				case GOTO:
+					case GOTO:         // done
+						posicaoParaIr = procurarPosicao(x->instrucao.first.content.name, hm);
+					break;
 
-				break;
-				// -------------------------------------------------------------------------------------------------------------------
+					case LABEL:        // done
+						 // chegamos ao LABEL e continuamos para a frente 
+					break;
 
-				case LABEL:
-					x = x->next; 
-					continue; // chegamos ao LABEL
-				break;
-
-				default:
-					return;
+					default:
+						return;
+				}
 			}
-			x = x->next; // segue para a proxima instrução
+		x = x->next; // segue para a proxima instrução
+		progresso++;
 		}
 	}
 }
 
+// ----------------------------------------------------------------------------------------------------------------------------------
 
+
+HASHMAP newHash(char *s, int v, HASHMAP tail) {
+	HASHMAP new = malloc(sizeof(struct hashmap));
+	new -> string = strdup(s);
+	new -> chave = v;
+	new -> next = tail;
+	return new;
+}	
+
+HASHMAP addHashLast(char *s, int v, HASHMAP h) {
+	HASHMAP aux = h;
+    if(h == NULL) {
+    	return newHash(s, v, NULL);
+    }
+    while((h->next) != NULL) {
+    	h = h->next;
+    }
+    h->next = newHash(s, v, NULL);
+    return aux;
+}
+
+void printHash(HASHMAP h) {
+	if(h==NULL) printf("HashMap vazio.\n");
+	else {
+		while(h!=NULL) {
+			printf("LABEL: %s, posição: %d\n", h->string, h->chave);
+			h = h->next;
+		}
+	}
+}
+
+int procurarPosicao(char *labelName, HASHMAP h) {
+	while(h!=NULL) {
+		if(strcmp(h->string,labelName)==0) {
+			return h->chave;
+		}
+		h = h->next;
+	}
+	return -1;
+}

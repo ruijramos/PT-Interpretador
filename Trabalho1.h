@@ -31,6 +31,21 @@ INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z);
 int getValue(ELEM x); // valor deu um elemento
 
 
+// ---------- hashmap -------------------------------------------------------------------
+
+typedef struct hashmap {
+	char *string;
+	int chave;
+	struct hashmap *next;
+} *HASHMAP;
+
+// --------------------------------------------------------------------------------------
+
+HASHMAP newHash(char *s, int v, HASHMAP tail);
+HASHMAP addHashLast(char *s, int v, HASHMAP h);
+void printHash(HASHMAP h);
+int procurarPosicao(char *labelName, HASHMAP hm);
+
 // ----------- listas e tables ----------------------------------------------------------
 typedef struct prog_list { // lsita de instruçoes
 	INSTR instrucao;
@@ -49,12 +64,10 @@ RECORD table[HASH_SIZE]; // HAST TABLE DEFINIDA COMO VARIAVEL GLOBAL
 void printList(PROG_LIST x);
 void imprimeInst(INSTR x);
 int listSize(PROG_LIST x);
-void executaLista(PROG_LIST x);
+void executaLista(PROG_LIST x, HASHMAP hm);
 PROG_LIST addProgLast(INSTR s, PROG_LIST l);
 PROG_LIST newList(INSTR head, PROG_LIST tail); // criar lista
 unsigned int hash(char *s); // ir ver onde ta a variavel
 RECORD lookup(char *s); // procura e retorna a posiçao na lista onde se encontra a string
 void insert(char *s, int value); // insere variavel/valor na hastable
 void init_table(); // limpa table
-
-
