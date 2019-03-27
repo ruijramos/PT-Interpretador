@@ -18,17 +18,13 @@ typedef struct {
 	ELEM first;
 	ELEM second;
 	ELEM third;
-	// POR EXEMPLO:
-	// op = +, first = y, second = x, third = 1;
-	// y = x+1
 } INSTR;
-// ------------------------------------------------------------------------------------
 
 ELEM newVar(char *s);
 ELEM newInt(int n);
 ELEM empty();
 INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z);
-int getValue(ELEM x); // valor deu um elemento
+int getValue(ELEM x); 
 
 
 // ---------- hashmap -------------------------------------------------------------------
@@ -38,8 +34,6 @@ typedef struct hashmap {
 	int chave;
 	struct hashmap *next;
 } *HASHMAP;
-
-// --------------------------------------------------------------------------------------
 
 HASHMAP newHash(char *s, int v, HASHMAP tail);
 HASHMAP addHashLast(char *s, int v, HASHMAP h);
@@ -59,7 +53,6 @@ typedef struct record { // hashtable com o valor das variaveis
 } *RECORD;
 
 RECORD table[HASH_SIZE]; // HAST TABLE DEFINIDA COMO VARIAVEL GLOBAL
-//----------------------------------------------------------------------------------------
 
 void printList(PROG_LIST x);
 void imprimeInst(INSTR x);

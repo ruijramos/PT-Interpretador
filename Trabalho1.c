@@ -5,7 +5,6 @@
 #include <ctype.h>
 #define MULTIPLIER 32
 
-// vão ser usadas no parce -------------------------------------------------------------
 ELEM newVar(char *s) {
 	ELEM y;
 	y.kind = STRING;
@@ -26,7 +25,6 @@ ELEM empty() {
 	return y;
 }
 
-// ------------------------------------------------------------------------------------
 
 INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z) { // nova instrução
 	INSTR aux;
@@ -35,13 +33,8 @@ INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z) { // nova instrução
 	aux.second = y;
 	aux.third = z;
 	return aux;
-	// Exemplo
-	// x = y + 2
-	// k = newInstr(ADD, newVar("x"), newVar("y"), newInt(2));
-	// k é a representação em memória da instrução
 }
 
-// meter uma instrução na lista -------------------------------
 PROG_LIST newList(INSTR head, PROG_LIST tail) {
 	PROG_LIST new = malloc(sizeof(struct prog_list));
 	new -> instrucao = head;
@@ -74,73 +67,7 @@ int listSize(PROG_LIST x) {
 	return -1;
 }
 
-/*
-void imprimeInst(INSTR x) {
-	switch(x.op) {
-				case ATRIBUICAO:		
-					printf("ATRIBUICAO ");
-				break;
-
-				case SUM:
-					printf("SUM ");
-					printf("%s ", x.first.content.name);
-				break;
-
-				case SUB:
-					printf("SUB ");
-				break;
-
-				case MULT:
-					printf("MULT ");
-				break;
-
-				case DIV: 
-					printf("DIV ");
-				break;
-
-				case IF: 
-					printf("IF ");
-				break;
-
-				case PRINT:
-					printf("PRINT ");
-					printf("%s \n", x.first.content.name);
-				break;
-
-				case LER:
-					printf("LER ");
-					printf("%s %d\n", x.first.content.name, getValue(x.second));
-				break;
-
-				case GOTO:
-					printf("GOTO ");
-				break;
-
-				case LABEL:
-					printf("LABEL");
-				break;
-
-				default:
-					return;
-	}
-	return;
-}
-void printList(PROG_LIST x) {
-	if(x==NULL) printf("Lista vazia\n");
-	else {
-		int i=1;
-		while(x!=NULL) {
-			printf("Instrução %d: ", i);
-			imprimeInst(x->instrucao);
-			x=x->next;
-			i++;
-		}
-	}
-}
-*/
-// ----------------------------------------------------------------------------------------------------------------
-
-unsigned int hash(char *s) { // retorna o indice de onde está a string 
+unsigned int hash(char *s) { // retorna o indice de onde está a string na hash table
 	unsigned int h;
 	unsigned char *p;
 	h=0;
@@ -184,7 +111,8 @@ void init_table() { // limpa a tabela
 
 int getValue(ELEM x) { // retorna o valor de um elemento
 	if(x.kind==STRING) {
-		return lookup(x.content.name)->valor;
+		if(lookup(x.content.name)!=NULL) return lookup(x.content.name)->valor;
+		else return -1;
 	}
 	if(x.kind==INT_CONST) {
 		return x.content.val;
@@ -202,7 +130,6 @@ void executaLista(PROG_LIST x, HASHMAP hm) { // executa a lista de instruçoes
 	else {
 		while(x != NULL) { // enquanto houver instruções para ler 
 			if(posicaoParaIr<=progresso) {
-				// entra aqui e percorre bem a cena
 				switch(x->instrucao.op) {
 					case ATRIBUICAO:	// done	
 						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)); // first = second
@@ -224,13 +151,11 @@ void executaLista(PROG_LIST x, HASHMAP hm) { // executa a lista de instruçoes
 						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)/getValue(x->instrucao.third));
 					break;
 
-					// -- em falta ------------------------------------------------------------------------------------------------------
-					case IF: 
-						if(getValue(x->instrucao.first)!=-1) { // se a varaivel ja tem valor siga para o goto
-							// ir para o goto
+					case IF:           // done
+						if(getValue(x->instrucao.first)!=-1) { // se a variavel n tem valor associado, n faz o goto
+							posicaoParaIr = procurarPosicao(x->instrucao.third.content.name, hm);
 						}
 					break;
-					// ------------------------------------------------------------------------------------------------------------------
 
 					case PRINT:        // done
 						if(getValue(x->instrucao.first)!=-1) {

@@ -18,7 +18,6 @@ INSTR avaliarInstrucao(char *s, HASHMAP hm, int posicao) {
 
 	token = strtok(s, " "); // primeira palavra da string da instrução
 	
-	// SAO STRING NAO SE USA SWITCH ---------------------------------------------------------------------
 	if(strcmp(token, "PRINT")==0) { // PRINT x ... valor de x
 		op = PRINT;
 		int i=1;
@@ -27,7 +26,6 @@ INSTR avaliarInstrucao(char *s, HASHMAP hm, int posicao) {
 			if(i==1) first = token;
 			i++;
 		}
-		//printf("first (a variavel que se vai printar): %s\n" , first);
 		x = newInstr(op, newVar(first), empty(), empty());
 		return x;
 	}
@@ -40,13 +38,11 @@ INSTR avaliarInstrucao(char *s, HASHMAP hm, int posicao) {
 			if(i==2) second = token;
 			i++;
 		}
-		//printf("first (onde se guarda): %s\n", first);
-		//printf("second (o valor a guardar): %s\n", second);
 		int secondtoInt = atoi(second);
 		x = newInstr(op, newVar(first), newInt(secondtoInt), empty());
 		return x;
 	}
-	else if(strcmp(token, "LABEL")==0) { // em falta
+	else if(strcmp(token, "LABEL")==0) { 
 		op = LABEL;
 		token = strtok(NULL, " ");
 		first = token;
@@ -54,13 +50,21 @@ INSTR avaliarInstrucao(char *s, HASHMAP hm, int posicao) {
 		hm = addHashLast(first, posicao, hm);
 		return x;
 	}
-	else if(strcmp(token, "IF")==0) { // em falta
-
+	else if(strcmp(token, "IF")==0) { 
+		op = IF;
+		token = strtok(NULL, " ");
+		first = token;
+		token = strtok(NULL, " ");
+		second = token;
+		token = strtok(NULL, " ");
+		third = token;
+		x = newInstr(op, newVar(first), newVar(second), newVar(third));
+		return x;
 	}
-	else if(strcmp(token, "GOTO")==0) { // em falta
+	else if(strcmp(token, "GOTO")==0) { 
 		op = GOTO;
 		token = strtok(NULL, " ");
-		first = token; // nome de onde é para ir
+		first = token; // nome da label de onde é para ir
 		x = newInstr(op, newVar(first), empty(), empty());
 		return x;
 	}
@@ -134,10 +138,7 @@ int main() {
 	}
 
 	printf("\nNúmero de instruções inseridas: %d\n", listSize(lista));
-	//printf("\nHash contéudo: \n");
-	//printHash(hm);
 	printf("\nExecução das instruções: \n");
-	//printList(lista);
 	executaLista(lista, hm);
 	
 	return 0;
