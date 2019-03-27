@@ -48,7 +48,6 @@ INSTR avaliarInstrucao(char *s) {
 		ELEM second1 = newInt(secondtoInt);
 		ELEM y = empty();	
 		x = newInstr(op, first1, second1, y);
-		printf("variavel guardada: %s\n", x.first.content.name);
 		return x;
 	}
 	else if(strcmp(token, "LABEL")==0) {
@@ -74,12 +73,14 @@ int main() {
 	char *auxiliar = malloc(maxSize*sizeof(char));
 	scanf("%[^\n]",auxiliar);getchar();
 	INSTR x = avaliarInstrucao(auxiliar);
+	printf("variavel guardada: %s\n", x.first.content.name);
 	PROG_LIST lista = newList(x, NULL);
 
 	scanf("%[^\n]",auxiliar);getchar();
 
 	while(strcmp(auxiliar, "QUIT")!=0) {
 		INSTR x = avaliarInstrucao(auxiliar);
+		printf("variavel guardada: %s\n", x.first.content.name);
 		lista = addProgLast(x, lista);
 		scanf("%[^\n]",auxiliar);getchar();
 	}

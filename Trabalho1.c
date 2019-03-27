@@ -124,7 +124,6 @@ void init_table() { // limpa a tabela
 
 int getValue(ELEM x) { // retorna o valor de um elemento
 	if(x.kind==STRING) {
-		// chega aqui, mas n faz o return SF
 		return lookup(x.content.name)->valor;
 	}
 	if(x.kind==INT_CONST) {
@@ -172,8 +171,7 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 
 				case PRINT:
 					// entra aqui
-					if(getValue(x->instrucao.first)!=-1)	{
-						// nao chega aqui
+					if(getValue(x->instrucao.first)!=-1) {
 						printf("%d\n", getValue(x->instrucao.first));
 					}
 					else printf("Variável sem valor inserido. \n");
@@ -181,9 +179,9 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 
 				case LER:
 					// entra aqui
-					// certo - printf("VALOR LIDO: %d\n", getValue(x->instrucao.second));
 					// problema está aqui: a string vem vazia
 					printf("variavel lida: %s\n", x->instrucao.first.content.name);
+					/*// certo - */printf("VALOR LIDO: %d\n", getValue(x->instrucao.second));
 					insert(x->instrucao.first.content.name, getValue(x->instrucao.second));
 				break;
 
