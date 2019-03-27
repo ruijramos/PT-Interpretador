@@ -46,8 +46,8 @@ typedef struct record { // hashtable com o valor das variaveis
 RECORD table[HASH_SIZE]; // HAST TABLE DEFINIDA COMO VARIAVEL GLOBAL
 //----------------------------------------------------------------------------------------
 
-
-
+void printList(PROG_LIST x);
+void imprimeInst(INSTR x);
 int listSize(PROG_LIST x);
 void executaLista(PROG_LIST x);
 PROG_LIST addProgLast(INSTR s, PROG_LIST l);

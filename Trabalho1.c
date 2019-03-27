@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Trabalho1.h"
+#include <ctype.h>
 #define MULTIPLIER 32
 
 // vão ser usadas no parce -----------------------------------
 ELEM newVar(char *s) {
 	ELEM y;
 	y.kind = STRING;
-	y.content.name = s;	
+	y.content.name = strdup(s);	
 	return y;
 }
 
@@ -71,6 +72,70 @@ int listSize(PROG_LIST x) {
 		return size;
 	}
 	return -1;
+}
+
+void imprimeInst(INSTR x) {
+	switch(x.op) {
+				case ATRIBUICAO:		
+					printf("ATRIBUICAO ");
+				break;
+
+				case SUM:
+					printf("SUM ");
+					printf("%s ", x.first.content.name);
+				break;
+
+				case SUB:
+					printf("SUB ");
+				break;
+
+				case MULT:
+					printf("MULT ");
+				break;
+
+				case DIV: 
+					printf("DIV ");
+				break;
+
+				case IF: 
+					printf("IF ");
+				break;
+
+				case PRINT:
+					printf("PRINT ");
+					printf("%s \n", x.first.content.name);
+				break;
+
+				case LER:
+					printf("LER ");
+					printf("%s %d\n", x.first.content.name, getValue(x.second));
+				break;
+
+				case GOTO:
+					printf("GOTO ");
+				break;
+
+				case LABEL:
+					printf("LABEL");
+				break;
+
+				default:
+					return;
+	}
+	return;
+}
+
+void printList(PROG_LIST x) {
+	if(x==NULL) printf("Lista vazia\n");
+	else {
+		int i=1;
+		while(x!=NULL) {
+			printf("Instrução %d: ", i);
+			imprimeInst(x->instrucao);
+			x=x->next;
+			i++;
+		}
+	}
 }
 // -------------------------------------------------------------
 
@@ -170,18 +235,12 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 				// ------------------------------------------------------------------------------------------------------------------
 
 				case PRINT:
-					// entra aqui
 					if(getValue(x->instrucao.first)!=-1) {
 						printf("%d\n", getValue(x->instrucao.first));
 					}
-					else printf("Variável sem valor inserido. \n");
 				break;
 
 				case LER:
-					// entra aqui
-					// problema está aqui: a string vem vazia
-					printf("variavel lida: %s\n", x->instrucao.first.content.name);
-					/*// certo - */printf("VALOR LIDO: %d\n", getValue(x->instrucao.second));
 					insert(x->instrucao.first.content.name, getValue(x->instrucao.second));
 				break;
 

@@ -1,7 +1,1 @@
 dúvidas :
-- Como passar para uma label
-- os valores do OP e ELEMS sao bem guardados na instrução q é acrescentada na lista.. mas depois quando vou por exemplo:
-LER x 2
-no switch quando entra no case LER
-prrinta bem o valor do second (2)
-mas printa vazio o valor da var first que deveria ser x
