@@ -77,6 +77,11 @@ INSTR avaliarInstrucao(char *s) {
 			token = strtok(NULL," ");
 			if(i==2) second = token;
 			if(i==3) {
+				if(token==NULL) {
+					op = ATRIBUICAO;
+					x = newInstr(op, newVar(first), newInt(atoi(second)), empty());
+					return x;
+				}
 				if(strcmp(token, "+")==0) {
 					op = SUM;					
 				}
@@ -89,13 +94,6 @@ INSTR avaliarInstrucao(char *s) {
 				if(strcmp(token, "/")==0) {
 					op = DIV;
 				}
-				/*
-				if(strcmp(token, "")==0) {
-					op = ATRIBUICAO;
-					x = newInstr(op, newVar(first), newInt(atoi(second)), empty());
-					return x;
-				}
-				*/
 			}
 			if(i==4) {
 				third = token;

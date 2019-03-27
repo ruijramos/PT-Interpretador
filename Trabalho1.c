@@ -206,23 +206,23 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 		while(x != NULL) { // enquanto houver instruções para ler 
 			// entra aqui e percorre bem a cena
 			switch(x->instrucao.op) {
-				case ATRIBUICAO:		
+				case ATRIBUICAO:	// done	
 					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)); // first = second
 				break;
 
-				case SUM:
+				case SUM:          // done
 					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)+getValue(x->instrucao.third)); // first = second + third
 				break;
 
-				case SUB:
+				case SUB:          // done
 					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)-getValue(x->instrucao.third)); // first = second - third
 				break;
 
-				case MULT:
+				case MULT:         // done
 					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)*getValue(x->instrucao.third));// first = second * third
 				break;
 
-				case DIV: 
+				case DIV:          // done
 					insert(x->instrucao.first.content.name, getValue(x->instrucao.second)/getValue(x->instrucao.third));
 				break;
 
@@ -234,13 +234,13 @@ void executaLista(PROG_LIST x) { // executa a lista de instruçoes
 				break;
 				// ------------------------------------------------------------------------------------------------------------------
 
-				case PRINT:
+				case PRINT:        // done
 					if(getValue(x->instrucao.first)!=-1) {
-						printf("%d\n", getValue(x->instrucao.first));
+						printf("%s = %d\n", x->instrucao.first.content.name,getValue(x->instrucao.first));
 					}
 				break;
 
-				case LER:
+				case LER:          // done
 					insert(x->instrucao.first.content.name, getValue(x->instrucao.second));
 				break;
 
