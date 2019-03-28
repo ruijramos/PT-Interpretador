@@ -258,11 +258,18 @@ void executaLista(PROG_LIST x, HASHMAP hm, int comecar) { // executa a lista de 
 					break;
 
 					case IF:           // done
+						if(getValue(x->instrucao.first)!=0) { // se sai 1, o if é executado
+							posicaoParaIr = procurarPosicao(x->instrucao.third.content.name, hm);
+							executaLista(aux, hm, posicaoParaIr);
+							return;
+						}
+						/*
 						if(avaliarIf(x->instrucao)==1) { // se sai 1, o if é executado
 							posicaoParaIr = procurarPosicao(x->instrucao.third.content.name, hm);
 							executaLista(aux, hm, posicaoParaIr);
 							return;
 						}
+						*/
 					break;
 
 					case PRINT:        // done
