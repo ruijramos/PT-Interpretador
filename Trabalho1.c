@@ -120,16 +120,17 @@ int getValue(ELEM x) { // retorna o valor de um elemento
 	else return -1;
 }
 
-void executaLista(PROG_LIST x, HASHMAP hm) { // executa a lista de instruçoes
+void executaLista(PROG_LIST x, HASHMAP hm, int comecar) { // executa a lista de instruçoes
+	PROG_LIST aux = x;
 	int progresso=1; // PARA SABER EM Q INSTRUÇÃO VAMOS A LER
-	int posicaoParaIr=1; // PARA OS GOTOS
+	int posicaoParaIr;
 	if(x==NULL) { // se é nula
 		printf("Nenhuma instrução a apresentar.\n");
 		return;
 	}
 	else {
 		while(x != NULL) { // enquanto houver instruções para ler 
-			if(posicaoParaIr<=progresso) {
+			if(comecar<=progresso) {
 				switch(x->instrucao.op) {
 					case ATRIBUICAO:	// done	
 						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)); // first = second
@@ -154,6 +155,8 @@ void executaLista(PROG_LIST x, HASHMAP hm) { // executa a lista de instruçoes
 					case IF:           // done
 						if(getValue(x->instrucao.first)!=-1) { // se a variavel n tem valor associado, n faz o goto
 							posicaoParaIr = procurarPosicao(x->instrucao.third.content.name, hm);
+							executaLista(aux, hm, posicaoParaIr);
+							return;
 						}
 					break;
 
@@ -184,9 +187,6 @@ void executaLista(PROG_LIST x, HASHMAP hm) { // executa a lista de instruçoes
 		}
 	}
 }
-
-// ----------------------------------------------------------------------------------------------------------------------------------
-
 
 HASHMAP newHash(char *s, int v, HASHMAP tail) {
 	HASHMAP new = malloc(sizeof(struct hashmap));

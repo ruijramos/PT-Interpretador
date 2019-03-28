@@ -57,7 +57,7 @@ RECORD table[HASH_SIZE]; // HAST TABLE DEFINIDA COMO VARIAVEL GLOBAL
 void printList(PROG_LIST x);
 void imprimeInst(INSTR x);
 int listSize(PROG_LIST x);
-void executaLista(PROG_LIST x, HASHMAP hm);
+void executaLista(PROG_LIST x, HASHMAP hm, int i);
 PROG_LIST addProgLast(INSTR s, PROG_LIST l);
 PROG_LIST newList(INSTR head, PROG_LIST tail); // criar lista
 unsigned int hash(char *s); // ir ver onde ta a variavel

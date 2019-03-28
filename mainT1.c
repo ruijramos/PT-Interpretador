@@ -139,7 +139,7 @@ int main() {
 
 	printf("\nNúmero de instruções inseridas: %d\n", listSize(lista));
 	printf("\nExecução das instruções: \n");
-	executaLista(lista, hm);
+	executaLista(lista, hm, 1);
 	
 	return 0;
 }
