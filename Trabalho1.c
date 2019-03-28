@@ -4,6 +4,7 @@
 #include "Trabalho1.h"
 #include <ctype.h>
 #define MULTIPLIER 32
+#define maxSize 20
 
 ELEM newVar(char *s) {
 	ELEM y;
@@ -120,6 +121,110 @@ int getValue(ELEM x) { // retorna o valor de um elemento
 	else return -1;
 }
 
+int avaliarIf(INSTR x) { // para avaliar um if, basta avaliar o elemento first q é onde ta a condição
+	
+	// reservas de espaço
+	char *first = malloc(maxSize*sizeof(char));
+	first = x.first.content.name;
+
+	if(strlen(first)==4) {
+		char *esquerda = malloc(maxSize*sizeof(char));
+		char *c1 = malloc(maxSize*sizeof(char));
+		char *c2 = malloc(maxSize*sizeof(char));
+		char *direita = malloc(maxSize*sizeof(char));
+
+		esquerda[0] = first[0];
+		c1[0] = first[1];
+		c2[0] = first[2];
+		direita[0] = first[3];
+
+		if(c1[0]=='>' && c2[0]=='=') {
+			if(isdigit(esquerda[0]) && isdigit(direita[0])) {
+				if(atoi(esquerda)>=atoi(direita)) return 1;
+			}
+			if(isdigit(esquerda[0])) {
+				if(atoi(esquerda)>=getValue(newVar(direita))) return 1;
+			}
+			if(isdigit(direita[0])) {
+				if(getValue(newVar(esquerda))>=atoi(direita)) return 1;
+			}
+			else {
+				if(getValue(newVar(esquerda))>=getValue(newVar(direita))) return 1;
+			}
+		}
+		if(c1[0]=='<' && c2[0]=='=') {
+			if(isdigit(esquerda[0]) && isdigit(direita[0])) {
+				if(atoi(esquerda)<=atoi(direita)) return 1;
+			}
+			if(isdigit(esquerda[0])) {
+				if(atoi(esquerda)<=getValue(newVar(direita))) return 1;
+			}
+			if(isdigit(direita[0])) {
+				if(getValue(newVar(esquerda))<=atoi(direita)) return 1;
+			}
+			else {
+				if(getValue(newVar(esquerda))<=getValue(newVar(direita))) return 1;
+			}
+		}
+		if(c1[0]=='=' && c2[0]=='=') {
+			if(isdigit(esquerda[0]) && isdigit(direita[0])) {
+				if(atoi(esquerda)==atoi(direita)) return 1;
+			}
+			if(isdigit(esquerda[0])) {
+				if(atoi(esquerda)==getValue(newVar(direita))) return 1;
+			}
+			if(isdigit(direita[0])) {
+				if(getValue(newVar(esquerda))==atoi(direita)) return 1;
+			}
+			else {
+				if(getValue(newVar(esquerda))==getValue(newVar(direita))) return 1;
+			}
+		}
+	}
+	if(strlen(first)==3) {
+		char *esquerda = malloc(maxSize*sizeof(char));
+		char *c = malloc(maxSize*sizeof(char));
+		char *direita = malloc(maxSize*sizeof(char));
+
+		esquerda[0] = first[0];
+		c[0] = first[1];
+		direita[0] = first[2];
+
+		if(c[0]=='>') {
+			if(isdigit(esquerda[0]) && isdigit(direita[0])) {
+				if(atoi(esquerda)>atoi(direita)) return 1;
+			}
+			if(isdigit(esquerda[0])) {
+				if(atoi(esquerda)>getValue(newVar(direita))) return 1;
+			}
+			if(isdigit(direita[0])) {
+				if(getValue(newVar(esquerda))>atoi(direita)) return 1;
+			}
+			else {
+				if(getValue(newVar(esquerda))>getValue(newVar(direita))) return 1;
+			}
+		}
+		if(c[0]=='<') {
+			if(isdigit(esquerda[0]) && isdigit(direita[0])) {
+				if(atoi(esquerda)<atoi(direita)) return 1;
+			}
+			if(isdigit(esquerda[0])) {
+				if(atoi(esquerda)<getValue(newVar(direita))) return 1;
+			}
+			if(isdigit(direita[0])) {
+				if(getValue(newVar(esquerda))<atoi(direita)) return 1;
+			}
+			else {
+				if(getValue(newVar(esquerda))<getValue(newVar(direita))) return 1;
+			}
+		}
+
+	}
+
+	return 0;
+	
+}
+
 void executaLista(PROG_LIST x, HASHMAP hm, int comecar) { // executa a lista de instruçoes
 	PROG_LIST aux = x;
 	int progresso=1; // PARA SABER EM Q INSTRUÇÃO VAMOS A LER
@@ -153,7 +258,7 @@ void executaLista(PROG_LIST x, HASHMAP hm, int comecar) { // executa a lista de 
 					break;
 
 					case IF:           // done
-						if(getValue(x->instrucao.first)!=-1) { // se a variavel n tem valor associado, n faz o goto
+						if(avaliarIf(x->instrucao)==1) { // se sai 1, o if é executado
 							posicaoParaIr = procurarPosicao(x->instrucao.third.content.name, hm);
 							executaLista(aux, hm, posicaoParaIr);
 							return;

@@ -24,7 +24,8 @@ ELEM newVar(char *s);
 ELEM newInt(int n);
 ELEM empty();
 INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z);
-int getValue(ELEM x); 
+int getValue(ELEM x);
+int avaliarIf(INSTR x); 
 
 
 // ---------- hashmap -------------------------------------------------------------------
