@@ -68,7 +68,7 @@ int listSize(PROG_LIST x) {
 	return -1;
 }
 
-unsigned int hash(char *s) { // retorna o indice de onde está a string na hash table
+unsigned int hash(char *s) { 
 	unsigned int h;
 	unsigned char *p;
 	h=0;
@@ -80,7 +80,7 @@ unsigned int hash(char *s) { // retorna o indice de onde está a string na hash 
 	return h%HASH_SIZE;
 }
 
-RECORD lookup(char *s) { // procura e retorna a posiçao na lista onde se encontra a string
+RECORD lookup(char *s) { 
 	int index;
 	RECORD p;
 	index = hash(s);
@@ -92,7 +92,7 @@ RECORD lookup(char *s) { // procura e retorna a posiçao na lista onde se encont
 	return NULL;
 }
 
-void insert(char *s, int value) { // insere variavel/valor na table
+void insert(char *s, int value) { 
 	int index;
 	RECORD p;
 	p = (RECORD)malloc(sizeof(struct record));
@@ -104,130 +104,26 @@ void insert(char *s, int value) { // insere variavel/valor na table
 	table[index] = p;
 }
 
-void init_table() { // limpa a tabela
+void init_table() { 
 	for(int i=0; i<HASH_SIZE; i++) {
 		table[i] = NULL;
 	}
 }
 
-int getValue(ELEM x) { // retorna o valor de um elemento
+int getValue(ELEM x) { 
 	if(x.kind==STRING) {
 		if(lookup(x.content.name)!=NULL) return lookup(x.content.name)->valor;
-		else return -1;
+		else return -1000;
 	}
 	if(x.kind==INT_CONST) {
 		return x.content.val;
 	}
-	else return -1;
-}
-
-int avaliarIf(INSTR x) { // para avaliar um if, basta avaliar o elemento first q é onde ta a condição
-	
-	// reservas de espaço
-	char *first = malloc(maxSize*sizeof(char));
-	first = x.first.content.name;
-
-	if(strlen(first)==4) {
-		char *esquerda = malloc(maxSize*sizeof(char));
-		char *c1 = malloc(maxSize*sizeof(char));
-		char *c2 = malloc(maxSize*sizeof(char));
-		char *direita = malloc(maxSize*sizeof(char));
-
-		esquerda[0] = first[0];
-		c1[0] = first[1];
-		c2[0] = first[2];
-		direita[0] = first[3];
-
-		if(c1[0]=='>' && c2[0]=='=') {
-			if(isdigit(esquerda[0]) && isdigit(direita[0])) {
-				if(atoi(esquerda)>=atoi(direita)) return 1;
-			}
-			if(isdigit(esquerda[0])) {
-				if(atoi(esquerda)>=getValue(newVar(direita))) return 1;
-			}
-			if(isdigit(direita[0])) {
-				if(getValue(newVar(esquerda))>=atoi(direita)) return 1;
-			}
-			else {
-				if(getValue(newVar(esquerda))>=getValue(newVar(direita))) return 1;
-			}
-		}
-		if(c1[0]=='<' && c2[0]=='=') {
-			if(isdigit(esquerda[0]) && isdigit(direita[0])) {
-				if(atoi(esquerda)<=atoi(direita)) return 1;
-			}
-			if(isdigit(esquerda[0])) {
-				if(atoi(esquerda)<=getValue(newVar(direita))) return 1;
-			}
-			if(isdigit(direita[0])) {
-				if(getValue(newVar(esquerda))<=atoi(direita)) return 1;
-			}
-			else {
-				if(getValue(newVar(esquerda))<=getValue(newVar(direita))) return 1;
-			}
-		}
-		if(c1[0]=='=' && c2[0]=='=') {
-			if(isdigit(esquerda[0]) && isdigit(direita[0])) {
-				if(atoi(esquerda)==atoi(direita)) return 1;
-			}
-			if(isdigit(esquerda[0])) {
-				if(atoi(esquerda)==getValue(newVar(direita))) return 1;
-			}
-			if(isdigit(direita[0])) {
-				if(getValue(newVar(esquerda))==atoi(direita)) return 1;
-			}
-			else {
-				if(getValue(newVar(esquerda))==getValue(newVar(direita))) return 1;
-			}
-		}
-	}
-	if(strlen(first)==3) {
-		char *esquerda = malloc(maxSize*sizeof(char));
-		char *c = malloc(maxSize*sizeof(char));
-		char *direita = malloc(maxSize*sizeof(char));
-
-		esquerda[0] = first[0];
-		c[0] = first[1];
-		direita[0] = first[2];
-
-		if(c[0]=='>') {
-			if(isdigit(esquerda[0]) && isdigit(direita[0])) {
-				if(atoi(esquerda)>atoi(direita)) return 1;
-			}
-			if(isdigit(esquerda[0])) {
-				if(atoi(esquerda)>getValue(newVar(direita))) return 1;
-			}
-			if(isdigit(direita[0])) {
-				if(getValue(newVar(esquerda))>atoi(direita)) return 1;
-			}
-			else {
-				if(getValue(newVar(esquerda))>getValue(newVar(direita))) return 1;
-			}
-		}
-		if(c[0]=='<') {
-			if(isdigit(esquerda[0]) && isdigit(direita[0])) {
-				if(atoi(esquerda)<atoi(direita)) return 1;
-			}
-			if(isdigit(esquerda[0])) {
-				if(atoi(esquerda)<getValue(newVar(direita))) return 1;
-			}
-			if(isdigit(direita[0])) {
-				if(getValue(newVar(esquerda))<atoi(direita)) return 1;
-			}
-			else {
-				if(getValue(newVar(esquerda))<getValue(newVar(direita))) return 1;
-			}
-		}
-
-	}
-
-	return 0;
-	
+	else return -1000;
 }
 
 void executaLista(PROG_LIST x, HASHMAP hm, int comecar) { // executa a lista de instruçoes
 	PROG_LIST aux = x;
-	int progresso=1; // PARA SABER EM Q INSTRUÇÃO VAMOS A LER
+	int progresso=1; // para andar pela prog_list e ver onde começar
 	int posicaoParaIr;
 	if(x==NULL) { // se é nula
 		printf("Nenhuma instrução a apresentar.\n");
@@ -237,56 +133,49 @@ void executaLista(PROG_LIST x, HASHMAP hm, int comecar) { // executa a lista de 
 		while(x != NULL) { // enquanto houver instruções para ler 
 			if(comecar<=progresso) {
 				switch(x->instrucao.op) {
-					case ATRIBUICAO:	// done	
+					case ATRIBUICAO:	
 						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)); // first = second
 					break;
 
-					case SUM:          // done
+					case SUM:          
 						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)+getValue(x->instrucao.third)); // first = second + third
 					break;
 
-					case SUB:          // done
+					case SUB:          
 						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)-getValue(x->instrucao.third)); // first = second - third
 					break;
 
-					case MULT:         // done
+					case MULT:         
 						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)*getValue(x->instrucao.third));// first = second * third
 					break;
 
-					case DIV:          // done
+					case DIV:          
 						insert(x->instrucao.first.content.name, getValue(x->instrucao.second)/getValue(x->instrucao.third));
 					break;
 
-					case IF:           // done
-						if(getValue(x->instrucao.first)!=0) { // se sai 1, o if é executado
-							posicaoParaIr = procurarPosicao(x->instrucao.third.content.name, hm);
+					case IF:           
+						if(getValue(x->instrucao.first)!=0) { // se o valor é diferente de 0, o if é executado
+							posicaoParaIr = procurarPosicao(x->instrucao.third.content.name, hm); // posição da lista onde está a label  
 							executaLista(aux, hm, posicaoParaIr);
 							return;
-						}
-						/*
-						if(avaliarIf(x->instrucao)==1) { // se sai 1, o if é executado
-							posicaoParaIr = procurarPosicao(x->instrucao.third.content.name, hm);
-							executaLista(aux, hm, posicaoParaIr);
-							return;
-						}
-						*/
+						}						
 					break;
 
-					case PRINT:        // done
-						if(getValue(x->instrucao.first)!=-1) {
+					case PRINT:        
+						if(getValue(x->instrucao.first)!=-1000) {
 							printf("%s = %d\n", x->instrucao.first.content.name,getValue(x->instrucao.first));
 						}
 					break;
 
-					case LER:          // done
+					case LER:          
 						insert(x->instrucao.first.content.name, getValue(x->instrucao.second));
 					break;
 
-					case GOTO:         // done
+					case GOTO:         
 						posicaoParaIr = procurarPosicao(x->instrucao.first.content.name, hm);
 					break;
 
-					case LABEL:        // done
+					case LABEL:      
 						 // chegamos ao LABEL e continuamos para a frente 
 					break;
 

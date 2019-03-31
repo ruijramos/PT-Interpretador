@@ -1,6 +1,7 @@
 #define HASH_SIZE 7
 
-// ----------------------------------------------------------------------------------
+// Instruções e Elementos
+
 typedef enum { ATRIBUICAO, SUM, SUB, MULT, DIV, IF, PRINT, LER, GOTO, LABEL, QUIT } OpKind;
 
 typedef enum { EMPTY, INT_CONST, STRING } ElemKind;
@@ -25,10 +26,9 @@ ELEM newInt(int n);
 ELEM empty();
 INSTR newInstr(OpKind oper, ELEM x, ELEM y, ELEM z);
 int getValue(ELEM x);
-int avaliarIf(INSTR x); 
+// ---------------------------------------------------------------------------------------------------------
 
-
-// ---------- hashmap -------------------------------------------------------------------
+// HashMap
 
 typedef struct hashmap {
 	char *string;
@@ -41,7 +41,10 @@ HASHMAP addHashLast(char *s, int v, HASHMAP h);
 void printHash(HASHMAP h);
 int procurarPosicao(char *labelName, HASHMAP hm);
 
-// ----------- listas e tables ----------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------
+
+// Prog_List e HashTable
+
 typedef struct prog_list { // lsita de instruçoes
 	INSTR instrucao;
 	struct prog_list *next;
@@ -53,7 +56,7 @@ typedef struct record { // hashtable com o valor das variaveis
 	struct record *next;
 } *RECORD;
 
-RECORD table[HASH_SIZE]; // HAST TABLE DEFINIDA COMO VARIAVEL GLOBAL
+RECORD table[HASH_SIZE]; // HAST TABLE 
 
 void printList(PROG_LIST x);
 void imprimeInst(INSTR x);

@@ -118,26 +118,25 @@ INSTR avaliarInstrucao(char *s, HASHMAP hm, int posicao) {
 
 int main() {
 
-	printf("Bem-vindo ao Intrepetador, por favor escreva as suas instruções e encerre com <QUIT>: \n");
-	
+	printf("Bem-vindo ao Intrepetador, por favor escreva as suas instruções e encerre com QUIT: \n");
 	char *auxiliar = malloc(maxSize*sizeof(char));
-	scanf("%[^\n]",auxiliar);getchar();
+	scanf("%[^\n]",auxiliar);getchar(); // leitura da primeira instrução
 
 	int posicao=1;
-	HASHMAP hm = newHash("INICIO", 0, NULL);
-	INSTR x = avaliarInstrucao(auxiliar, hm, posicao);
-	PROG_LIST lista = newList(x, NULL);
+	HASHMAP hm = newHash("INICIO", 0, NULL); // primeira posição do hashmap terá o valor (INICIO, 0) por definição
+	INSTR x = avaliarInstrucao(auxiliar, hm, posicao); 
+	PROG_LIST lista = newList(x, NULL); // criação da prog_list com a primeira instrução
 
 	scanf("%[^\n]",auxiliar);getchar();
 
-	while(strcmp(auxiliar, "<QUIT>")!=0) {
+	while(strcmp(auxiliar, "QUIT")!=0) { // enquanto o utilizador não digitar "QUIT" são lidas instruções
 		posicao++;
 		INSTR x = avaliarInstrucao(auxiliar, hm, posicao);
 		lista = addProgLast(x, lista);
 		scanf("%[^\n]",auxiliar);getchar();
 	}
 
-	printf("\nNúmero de instruções inseridas: %d\n", listSize(lista));
+	// printf("\nNúmero de instruções inseridas: %d\n", listSize(lista));
 	printf("\nExecução das instruções: \n");
 	executaLista(lista, hm, 1);
 	
