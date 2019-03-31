@@ -1,4 +1,4 @@
-# LabProg---Intrepetor-
+# LabProg---Interpreter-
 Intrepetador de linguagem de programação definida.
 
 Trabalho 1:
