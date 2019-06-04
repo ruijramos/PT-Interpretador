@@ -1,8 +1,6 @@
 # LabProg---Interpreter-
 Intrepetador de linguagem de programação definida.
 
-Trabalho 1:
-
 Pretende-se escrever um interpretador para uma linguagem de programação definida por um conjunto de instruções relativamente pequeno.
 
 
@@ -52,38 +50,3 @@ escrever(p);
 label L2;
 
 quit;
-
-
-Sugestões:
-1) use uma lista de instruções como input do interpretador, para lidar com os ciclos.
-2) Mantenha os valores das variáveis numa tabela de hash.
-3) Uma sugestão possível para representar instruções são quádruplos (por exemplo p = 2*p seria representado por (MUL, p, 2, p) e label L1 por (LABEL, L1, EMPTY, EMPTY).).
-4) Esta estrutura pode ser representada em C da forma seguinte:
-
-
-typedef enum {ATRIB, ADD, SUB, MUL, IF_I, PRINT, READ, GOTO_I, LABEL,...} OpKind;
-
-typedef enum {EMPTY, INT_CONST, STRING} ElemKind;
-
-typedef struct
-                {
-                   ElemKind kind;
-                   union
-                    {
-                      int val;
-                      char *name;
-                     } contents;
-                  } Elem;
-
-typedef struct
-                 {
-                    OpKind op;
-                    Elem first, second, third;
-                  } Instr;
-
-
-
-
-Prazo para Entrega: 8 de Abril
-
-Os trabalhos deverão ser feitos em grupos de dois alunos. Deverão ser enviados por email para o respectivo docente das práticas e apresentados (numa apresentação breve) ao docente durante as aulas práticas da semana de 8 a 12 de Abril.
