@@ -22,31 +22,5 @@ escrever(<variável>);
 - comandos condicionais da forma: if <variável> goto <label>
 
 - Terminar a execução do programa:
-quit;
+QUIT
 
-
-
-Um exemplo de uso desta linguagem:
-
-
-ler(k);
-
-p= 6 + k;
-
-if p goto L1;
-
-p = p/2;
-
-escrever(p);
-
-goto L2;
-
-label L1;
-
-p = 2*p;
-
-escrever(p);
-
-label L2;
-
-quit;
