@@ -1,4 +1,4 @@
-# LabProg---Interpreter-
+# INTERPRETADOR
 Intrepetador de linguagem de programação definida.
 
 Pretende-se escrever um interpretador para uma linguagem de programação definida por um conjunto de instruções relativamente pequeno.
