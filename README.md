@@ -1,8 +1,6 @@
 # INTERPRETADOR
-Intrepetador de linguagem de programação definida.
 
-Pretende-se escrever um interpretador para uma linguagem de programação definida por um conjunto de instruções relativamente pequeno.
-
+Interpretador para uma linguagem de programação definida por um conjunto de instruções relativamente pequeno.
 
 - Expressões: expressões aritméticas com um único operador. (exemplos: 2 + 3 , 4*x , y/z ).
 
