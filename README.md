@@ -32,24 +32,24 @@ Feito isto, basta introduzir instruções, concluíndo, cada uma, com ENTER ('\n
 
 Tipos de instrunções aceites:
 
--> Atribuições.
+- Atribuições.
 Exemplo: x = 2
 
--> Leituras.
+- Leituras.
 Exemplo: LER x 2 (em que x fica com o valor 2)
 
--> Prints.
+- Prints.
 Exemplo: PRINT x
 
--> Somas, Subtrações, Multiplicações e Divisões.
+- Somas, Subtrações, Multiplicações e Divisões.
 Exemplo: x = 2 + 2, x = x - 4, y = x * 2, k = x / y
 
--> Labels.
+- Labels.
 Exemplo: LABEL L1, LABEL L2
 
--> Condições (saltos condicionais).
+- Condições (saltos condicionais).
 Exemplo: IF x GOTO L1 
 
--> Saltos.
+- Saltos.
 Exemplo: GOTO L1
 
