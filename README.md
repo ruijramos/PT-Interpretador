@@ -31,6 +31,7 @@ Feito isto, basta introduzir instruções, concluíndo, cada uma, com ENTER ('\n
 É importante referir que devem ser deixados espaços no Input das instruções, para que o programa funcione da maneira correta.
 
 Tipos de instrunções aceites:
+
 -> Atribuições.
 Exemplo: x = 2
 
