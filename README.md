@@ -1,5 +1,7 @@
 # INTERPRETADOR
 
+Projeto da Unidade Curricular de Licenciatura - 2º Ano - Laboratório de Programação.
+
 Interpretador para uma linguagem de programação definida por um conjunto de instruções relativamente pequeno.
 
 - Expressões: expressões aritméticas com um único operador. (exemplos: 2 + 3 , 4*x , y/z ).
