@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Trabalho1.h"
+#include "interpreter.h"
 #include <ctype.h>
 #define MULTIPLIER 32
 #define maxSize 20

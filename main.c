@@ -1,4 +1,4 @@
-#include "Trabalho1.h"
+#include "interpreter.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
